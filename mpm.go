@@ -117,9 +117,9 @@ func MysqlAlive(m *MysqlIns, ok bool) {
 }
 
 func FetchData(m *MysqlIns) (err error) {
-	defer func(err error) {
+	defer func() {
 		MysqlAlive(m, err == nil)
-	}(err)
+	}()
 
 	db := mysql.New("tcp", "", fmt.Sprintf("%s:%d", m.Host, m.Port),
 		cfg.User, cfg.Pass)
