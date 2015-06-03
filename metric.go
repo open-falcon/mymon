@@ -234,7 +234,7 @@ var DataType = map[string]string{
 }
 
 type MysqlIns struct {
-	Hostname string
+	Endpoint string
 	Host string
 	Port int
 	Tag  string
@@ -275,7 +275,7 @@ func NewMetric(name string) *MetaData {
 }
 
 func hostname() string {
-	host := cfg.Hostname
+	host := cfg.Endpoint
 	if host != "" {
 		return host
 	}
