@@ -274,10 +274,11 @@ func NewMetric(name string) *MetaData {
 }
 
 func hostname() string {
-	host := Cfg.Hostname
+    host := Cfg.Hostname
     if host != "" {
-        return host
+       return host
     }
+    
 	host, err := os.Hostname()
 	if err != nil {
 		host = cfg.Host
