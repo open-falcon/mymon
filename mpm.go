@@ -77,6 +77,11 @@ func (conf *Cfg) readConf(file string) error {
 		return err
 	}
 
+	conf.Hostname, err = c.GetString("default", "hostname")
+	if err != nil {
+		return err
+	}
+
 	conf.User, err = c.GetString("mysql", "user")
 	if err != nil {
 		return err
