@@ -18,7 +18,8 @@ type Cfg struct {
 	LogFile      string
 	LogLevel     int
 	FalconClient string
-
+	Hostname string
+	
 	User string
 	Pass string
 	Host string
