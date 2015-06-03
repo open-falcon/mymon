@@ -234,7 +234,6 @@ var DataType = map[string]string{
 }
 
 type MysqlIns struct {
-	Endpoint string
 	Host string
 	Port int
 	Tag  string

@@ -34,8 +34,8 @@ echo '* * * * * cd $GOPATH/src/github.com/open-falcon/ && ./mymon -c etc/mon.cfg
 
     falcon_client=http://127.0.0.1:1988/v1/push # falcon agent连接地址
     #mysql endpoint
-    endpoint=127.0.0.1
-    
+    endpoint=127.0.0.1 #若设置endpoint就是mysql机器名,若不设置则使用OS的hostname
+
     [mysql]
     user=root # 数据库用户名
     password= # 数据库密码
