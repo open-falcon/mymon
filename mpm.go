@@ -18,6 +18,7 @@ type Cfg struct {
 	LogFile      string
 	LogLevel     int
 	FalconClient string
+	Endpoint string
 
 	User string
 	Pass string
@@ -73,6 +74,11 @@ func (conf *Cfg) readConf(file string) error {
 	}
 
 	conf.FalconClient, err = c.GetString("default", "falcon_client")
+	if err != nil {
+		return err
+	}
+
+	conf.Endpoint, err = c.GetString("default", "endpoint")
 	if err != nil {
 		return err
 	}
