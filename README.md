@@ -15,7 +15,7 @@ cd mymon
 go get ./...
 go build -o mymon
 
-echo '* * * * * cd $GOPATH/src/github.com/open-falcon/ && ./mymon -c etc/mon.cfg' > /etc/cron.d/mymon
+echo '* * * * * cd $GOPATH/src/github.com/open-falcon/mymon && ./mymon -c etc/mon.cfg' > /etc/cron.d/mymon
 
 ```
 
@@ -33,8 +33,9 @@ echo '* * * * * cd $GOPATH/src/github.com/open-falcon/ && ./mymon -c etc/mon.cfg
     log_level=4 # 日志级别
 
     falcon_client=http://127.0.0.1:1988/v1/push # falcon agent连接地址
-    #mysql endpoint
-    endpoint=127.0.0.1 #若设置endpoint就是mysql机器名,若不设置则使用OS的hostname
+
+    #自定义endpoint
+    endpoint=127.0.0.1 #若不设置则使用OS的hostname
 
     [mysql]
     user=root # 数据库用户名
