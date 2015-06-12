@@ -18,7 +18,7 @@ type Cfg struct {
 	LogFile      string
 	LogLevel     int
 	FalconClient string
-	Endpoint string
+	Endpoint     string
 
 	User string
 	Pass string
@@ -159,6 +159,12 @@ func FetchData(m *MysqlIns) (err error) {
 		return
 	}
 	data = append(data, slaveState...)
+
+	dataSize, err := getDataSize(m, db)
+	if err != nil {
+		return
+	}
+	data = append(data, dataSize)
 
 	msg, err := sendData(data)
 	if err != nil {
