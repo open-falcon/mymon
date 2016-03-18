@@ -1,0 +1,21 @@
+{
+	"log_level": "debug",
+	"interval": 60,
+	"falcon_client": "http://127.0.0.1:1988/v1/push",
+	"db_server_list": [
+	{
+		"endpoint": "mixuan1",
+		"host": "idao.me",
+		"port": 3306,
+		"user": "root",
+		"passwd": "mysql@mixuan"
+	},
+	{
+		"endpoint": "hz_udai_01",
+		"host": "udai.com",
+		"port": 3306,
+		"user": "root",
+		"passwd": "mysql@udai"
+	}
+	]
+}
