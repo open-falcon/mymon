@@ -2,46 +2,48 @@
 
 mymon(MySQL-Monitor) -- MySQL数据库运行状态数据采集脚本，采集包括global status, global variables, slave status等。
 
+由github.com/open-falcon/mymon 修改而来，
+支持配置多个MySQL实例
 ## Installation
 
 ```bash
 # set $GOPATH and $GOROOT
 
-mkdir -p $GOPATH/src/github.com/open-falcon
-cd $GOPATH/src/github.com/open-falcon
-git clone https://github.com/open-falcon/mymon.git
+mkdir -p $GOPATH/src/github.com/coraldane
+cd $GOPATH/src/github.com/coraldane
+git clone https://github.com/coraldane/mymon.git
 
 cd mymon
 go get ./...
-go build -o mymon
+control build
 
-echo '* * * * * cd $GOPATH/src/github.com/open-falcon/mymon && ./mymon -c etc/mon.cfg' > /etc/cron.d/mymon
 
 ```
 
 ## Configuration
 
 ```
-    [default]
-    log_file=mymon.log # 日志路径和文件名
-    # Panic 0
-    # Fatal 1
-    # Error 2
-    # Warn 3
-    # Info 4
-    # Debug 5
-    log_level=4 # 日志级别
-
-    falcon_client=http://127.0.0.1:1988/v1/push # falcon agent连接地址
-
-    #自定义endpoint
-    endpoint=127.0.0.1 #若不设置则使用OS的hostname
-
-    [mysql]
-    user=root # 数据库用户名
-    password= # 数据库密码
-    host=127.0.0.1 # 数据库连接地址
-    port=3306 # 数据库端口
+{
+    "log_level": "debug",
+    "interval": 60,
+    "falcon_client": "http://127.0.0.1:1988/v1/push",
+    "db_server_list": [
+    {
+        "endpoint": "机器名1",
+        "host": "host地址1",
+        "port": 3306,
+        "user": "$user",
+        "passwd": "$pass"
+    },
+    {
+        "endpoint": "机器名2",
+        "host": "host地址2",
+        "port": 3306,
+        "user": "$user",
+        "passwd": "$pass"
+    }
+    ]
+}
 ```
 
 ## MySQL metrics
@@ -52,4 +54,4 @@ echo '* * * * * cd $GOPATH/src/github.com/open-falcon/mymon && ./mymon -c etc/mo
 ## Contributors
 
  - libin  微信：libin_cc  邮件：libin_dba@xiaomi.com
-
+ - coraldane 邮件：coraldane@163.com

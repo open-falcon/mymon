@@ -4,18 +4,18 @@
 	"falcon_client": "http://127.0.0.1:1988/v1/push",
 	"db_server_list": [
 	{
-		"endpoint": "mixuan1",
-		"host": "idao.me",
+		"endpoint": "***",
+		"host": "***",
 		"port": 3306,
 		"user": "root",
-		"passwd": "mysql@mixuan"
+		"passwd": "***"
 	},
 	{
-		"endpoint": "hz_udai_01",
-		"host": "udai.com",
+		"endpoint": "***",
+		"host": "***",
 		"port": 3306,
 		"user": "root",
-		"passwd": "mysql@udai"
+		"passwd": "***"
 	}
 	]
 }

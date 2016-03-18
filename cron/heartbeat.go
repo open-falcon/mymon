@@ -6,21 +6,19 @@ import (
 	"time"
 )
 
-func Heartbeat() {
+func Heartbeat(server *g.DBServer) {
 	time.Sleep(10 * time.Second)
 	SleepRandomDuration()
 	for {
-		heartbeat()
+		heartbeat(server)
 		d := time.Duration(g.Config().Interval) * time.Second
 		time.Sleep(d)
 	}
 }
 
-func heartbeat() {
-	for _, server := range g.Config().DBServerList {
-		err := FetchData(server)
-		if err != nil {
-			logger.Errorln(err)
-		}
+func heartbeat(server *g.DBServer) {
+	err := FetchData(server)
+	if err != nil {
+		logger.Errorln(err)
 	}
 }
