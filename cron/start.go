@@ -25,37 +25,43 @@ func FetchData(server *g.DBServer) (err error) {
 		server.User, server.Passwd)
 	db.SetTimeout(500 * time.Millisecond)
 	if err = db.Connect(); err != nil {
-		return
+		logger.Errorln("connect db error", err)
+		return err
 	}
 	defer db.Close()
 
 	data := make([]*models.MetaData, 0)
 	globalStatus, err := job.GlobalStatus(server, db)
 	if err != nil {
+		logger.Errorln("get GlobalStatus error", err)
 		return
 	}
 	data = append(data, globalStatus...)
 
 	globalVars, err := job.GlobalVariables(server, db)
 	if err != nil {
+		logger.Errorln("get GlobalVariables error", err)
 		return
 	}
 	data = append(data, globalVars...)
 
 	innodbState, err := job.InnodbStatus(server, db)
 	if err != nil {
+		logger.Errorln("get InnodbStatus error", err)
 		return
 	}
 	data = append(data, innodbState...)
 
 	slaveState, err := job.SlaveStatus(server, db)
 	if err != nil {
+		logger.Errorln("get SlaveStatus error", err)
 		return
 	}
 	data = append(data, slaveState...)
 
 	msg, err := sendData(data)
 	if err != nil {
+		logger.Errorln("sendData error", err)
 		return
 	}
 	logger.Info("Send response %s: %s", server.String(), string(msg))
