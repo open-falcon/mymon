@@ -1,21 +1,15 @@
 {
 	"log_level": "debug",
 	"interval": 60,
+	"connect_timeout": 5,
 	"falcon_client": "http://127.0.0.1:1988/v1/push",
 	"db_server_list": [
 	{
-		"endpoint": "***",
-		"host": "***",
+		"endpoint": "",
+		"host": "localhost",
 		"port": 3306,
-		"user": "root",
-		"passwd": "***"
-	},
-	{
-		"endpoint": "***",
-		"host": "***",
-		"port": 3306,
-		"user": "root",
-		"passwd": "***"
+		"user": "falcon",
+		"passwd": "failcon"
 	}
 	]
 }

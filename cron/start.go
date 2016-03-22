@@ -23,7 +23,7 @@ func FetchData(server *g.DBServer) (err error) {
 
 	db := mysql.New("tcp", "", fmt.Sprintf("%s:%d", server.Host, server.Port),
 		server.User, server.Passwd)
-	db.SetTimeout(500 * time.Millisecond)
+	db.SetTimeout(g.Config().ConnectTimeout * time.Second)
 	if err = db.Connect(); err != nil {
 		logger.Errorln("connect db error", err)
 		return err
