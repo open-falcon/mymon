@@ -1,22 +1,23 @@
 package job
 
 import (
+	"fmt"
+	"github.com/coraldane/mymon/db"
 	"github.com/coraldane/mymon/g"
 	"github.com/coraldane/mymon/models"
-	"github.com/ziutek/mymysql/mysql"
-	_ "github.com/ziutek/mymysql/native"
+	"strconv"
 )
 
-func GlobalStatus(server *g.DBServer, db mysql.Conn) ([]*models.MetaData, error) {
-	return mysqlState(server, db, "SHOW /*!50001 GLOBAL */ STATUS")
+func GlobalStatus(server *g.DBServer) ([]*models.MetaData, error) {
+	return mysqlState(server, "SHOW /*!50001 GLOBAL */ STATUS")
 }
 
-func GlobalVariables(server *g.DBServer, db mysql.Conn) ([]*models.MetaData, error) {
-	return mysqlState(server, db, "SHOW /*!50001 GLOBAL */ VARIABLES")
+func GlobalVariables(server *g.DBServer) ([]*models.MetaData, error) {
+	return mysqlState(server, "SHOW /*!50001 GLOBAL */ VARIABLES")
 }
 
-func mysqlState(server *g.DBServer, db mysql.Conn, sql string) ([]*models.MetaData, error) {
-	rows, _, err := db.Query(sql)
+func mysqlState(server *g.DBServer, sql string) ([]*models.MetaData, error) {
+	rows, err := db.QueryRows(g.Hostname(server), sql)
 	if err != nil {
 		return nil, err
 	}
@@ -24,12 +25,8 @@ func mysqlState(server *g.DBServer, db mysql.Conn, sql string) ([]*models.MetaDa
 	data := make([]*models.MetaData, len(rows))
 	i := 0
 	for _, row := range rows {
-		key_ := row.Str(0)
-		v, err := row.Int64Err(1)
-		// Ignore non digital value
-		if err != nil {
-			continue
-		}
+		key_ := fmt.Sprintf("%v", row["Variable_name"])
+		v, _ := strconv.Atoi(fmt.Sprintf("%v", row["Value"]))
 
 		data[i] = models.NewMetric(key_, server)
 		data[i].SetValue(v)

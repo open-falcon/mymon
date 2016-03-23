@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/coraldane/mymon/cron"
+	"github.com/coraldane/mymon/db"
 	"github.com/coraldane/mymon/g"
 	"github.com/toolkits/logger"
 	"log"
@@ -27,6 +28,7 @@ func main() {
 	}
 
 	logger.SetLevelWithDefault(g.Config().LogLevel, "info")
+	db.InitDatabase()
 
 	for _, server := range g.Config().DBServerList {
 		go cron.Heartbeat(server)

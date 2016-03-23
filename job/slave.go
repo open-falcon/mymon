@@ -1,11 +1,11 @@
 package job
 
 import (
+	"fmt"
+	"github.com/coraldane/mymon/db"
 	"github.com/coraldane/mymon/g"
 	"github.com/coraldane/mymon/models"
-
-	"github.com/ziutek/mymysql/mysql"
-	_ "github.com/ziutek/mymysql/native"
+	"strconv"
 )
 
 var SlaveStatusToSend = []string{
@@ -17,16 +17,16 @@ var SlaveStatusToSend = []string{
 	"Slave_SQL_Running",
 }
 
-func SlaveStatus(server *g.DBServer, db mysql.Conn) ([]*models.MetaData, error) {
+func SlaveStatus(server *g.DBServer) ([]*models.MetaData, error) {
 	isSlave := models.NewMetric("Is_slave", server)
 
-	row, res, err := db.QueryFirst("SHOW SLAVE STATUS")
+	row, err := db.QueryFirst(g.Hostname(server), "SHOW SLAVE STATUS")
 	if err != nil {
 		return nil, err
 	}
 
 	// be master
-	if row == nil {
+	if row == nil || 0 == len(row) {
 		isSlave.SetValue(0)
 		return []*models.MetaData{isSlave}, nil
 	}
@@ -40,12 +40,12 @@ func SlaveStatus(server *g.DBServer, db mysql.Conn) ([]*models.MetaData, error) 
 		switch s {
 		case "Slave_SQL_Running", "Slave_IO_Running":
 			data[i].SetValue(0)
-			v := row.Str(res.Map(s))
+			v := fmt.Sprintf("%v", row[s])
 			if v == "Yes" {
 				data[i].SetValue(1)
 			}
 		default:
-			v, err := row.Int64Err(res.Map(s))
+			v, err := strconv.Atoi(fmt.Sprintf("%v", row[s]))
 			if err != nil {
 				data[i].SetValue(-1)
 			} else {

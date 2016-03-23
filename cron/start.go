@@ -3,17 +3,12 @@ package cron
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/coraldane/mymon/g"
 	"github.com/coraldane/mymon/job"
 	"github.com/coraldane/mymon/models"
 	"github.com/toolkits/logger"
 	"io/ioutil"
 	"net/http"
-	"time"
-
-	"github.com/ziutek/mymysql/mysql"
-	_ "github.com/ziutek/mymysql/native"
 )
 
 func FetchData(server *g.DBServer) (err error) {
@@ -21,38 +16,29 @@ func FetchData(server *g.DBServer) (err error) {
 		MysqlAlive(server, err == nil)
 	}()
 
-	db := mysql.New("tcp", "", fmt.Sprintf("%s:%d", server.Host, server.Port),
-		server.User, server.Passwd)
-	db.SetTimeout(time.Duration(g.Config().ConnectTimeout) * time.Second)
-	if err = db.Connect(); err != nil {
-		logger.Errorln("connect db error", err)
-		return err
-	}
-	defer db.Close()
-
 	data := make([]*models.MetaData, 0)
-	globalStatus, err := job.GlobalStatus(server, db)
+	globalStatus, err := job.GlobalStatus(server)
 	if err != nil {
 		logger.Errorln("get GlobalStatus error", err)
 		return
 	}
 	data = append(data, globalStatus...)
 
-	globalVars, err := job.GlobalVariables(server, db)
+	globalVars, err := job.GlobalVariables(server)
 	if err != nil {
 		logger.Errorln("get GlobalVariables error", err)
 		return
 	}
 	data = append(data, globalVars...)
 
-	innodbState, err := job.InnodbStatus(server, db)
+	innodbState, err := job.InnodbStatus(server)
 	if err != nil {
 		logger.Errorln("get InnodbStatus error", err)
 		return
 	}
 	data = append(data, innodbState...)
 
-	slaveState, err := job.SlaveStatus(server, db)
+	slaveState, err := job.SlaveStatus(server)
 	if err != nil {
 		logger.Errorln("get SlaveStatus error", err)
 		return

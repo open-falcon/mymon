@@ -1,22 +1,22 @@
 package job
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 
+	"github.com/coraldane/mymon/db"
 	"github.com/coraldane/mymon/g"
 	"github.com/coraldane/mymon/models"
-	"github.com/ziutek/mymysql/mysql"
-	_ "github.com/ziutek/mymysql/native"
 )
 
-func InnodbStatus(server *g.DBServer, db mysql.Conn) ([]*models.MetaData, error) {
-	status, _, err := db.QueryFirst("SHOW /*!50000 ENGINE */ INNODB STATUS")
+func InnodbStatus(server *g.DBServer) ([]*models.MetaData, error) {
+	rowMap, err := db.QueryFirst(g.Hostname(server), "SHOW /*!50000 ENGINE */ INNODB STATUS")
 	if err != nil {
 		return nil, err
 	}
-	ctn := status.Str(2)
+	ctn := fmt.Sprintf("%v", rowMap["Status"])
 	rows := strings.Split(ctn, "\n")
 	return parseInnodbStatus(server, rows)
 }

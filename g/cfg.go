@@ -24,6 +24,7 @@ func (this *DBServer) String() string {
 type GlobalConfig struct {
 	LogLevel       string      `json:"log_level"`
 	Interval       int         `json:"interval"`
+	MaxIdle        int         `json:"max_idle"`
 	ConnectTimeout int         `json:"connect_timeout"`
 	FalconClient   string      `json:"falcon_client"`
 	DBServerList   []*DBServer `json:"db_server_list"`
