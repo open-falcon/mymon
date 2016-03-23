@@ -28,7 +28,7 @@ func InitDatabase() {
 		if 0 == index {
 			orm.RegisterDataBase("default", "mysql", dsn, maxIdle, maxIdle)
 		}
-		orm.RegisterDataBase(server.Endpoint, "mysql", dsn, maxIdle, maxIdle)
+		orm.RegisterDataBase(g.Hostname(server), "mysql", dsn, maxIdle, maxIdle)
 	}
 }
 
