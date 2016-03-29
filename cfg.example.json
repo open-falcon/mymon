@@ -1,0 +1,16 @@
+{
+	"log_level": "debug",
+	"interval": 60,
+	"connect_timeout": 5,
+	"max_idle": 10,
+	"falcon_client": "http://127.0.0.1:1989/v1/push",
+	"db_server_list": [
+	{
+		"endpoint": "mixuan1",
+		"host": "idao.me",
+		"port": 3306,
+		"user": "viewer",
+		"passwd": "mixuan"
+	}
+	]
+}

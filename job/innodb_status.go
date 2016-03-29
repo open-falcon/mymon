@@ -1,27 +1,29 @@
-package main
+package job
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/ziutek/mymysql/mysql"
-	_ "github.com/ziutek/mymysql/native"
+	"github.com/coraldane/mymon/db"
+	"github.com/coraldane/mymon/g"
+	"github.com/coraldane/mymon/models"
 )
 
-func innodbStatus(m *MysqlIns, db mysql.Conn) ([]*MetaData, error) {
-	status, _, err := db.QueryFirst("SHOW /*!50000 ENGINE */ INNODB STATUS")
+func InnodbStatus(server *g.DBServer) ([]*models.MetaData, error) {
+	rowMap, err := db.QueryFirst(g.Hostname(server), "SHOW /*!50000 ENGINE */ INNODB STATUS")
 	if err != nil {
 		return nil, err
 	}
-	ctn := status.Str(2)
+	ctn := fmt.Sprintf("%v", rowMap["Status"])
 	rows := strings.Split(ctn, "\n")
-	return parseInnodbStatus(m, rows)
+	return parseInnodbStatus(server, rows)
 }
 
-func parseInnodbStatus(m *MysqlIns, rows []string) ([]*MetaData, error) {
+func parseInnodbStatus(server *g.DBServer, rows []string) ([]*models.MetaData, error) {
 	var section string
-	data := make([]*MetaData, 0)
+	data := make([]*models.MetaData, 0)
 	for _, row := range rows {
 		switch {
 		case match("^BACKGROUND THREAD$", row):
@@ -60,17 +62,17 @@ func parseInnodbStatus(m *MysqlIns, rows []string) ([]*MetaData, error) {
 			matches := regexp.MustCompile(`^Mutex spin waits\s+(\d+),\s+rounds\s+(\d+),\s+OS waits\s+(\d+)`).FindStringSubmatch(row)
 			if len(matches) == 4 {
 				spin_waits, _ := strconv.Atoi(matches[1])
-				Innodb_mutex_spin_waits := NewMetric("Innodb_mutex_spin_waits")
+				Innodb_mutex_spin_waits := models.NewMetric("Innodb_mutex_spin_waits", server)
 				Innodb_mutex_spin_waits.SetValue(spin_waits)
 				data = append(data, Innodb_mutex_spin_waits)
 
 				spin_rounds, _ := strconv.Atoi(matches[2])
-				Innodb_mutex_spin_rounds := NewMetric("Innodb_mutex_spin_rounds")
+				Innodb_mutex_spin_rounds := models.NewMetric("Innodb_mutex_spin_rounds", server)
 				Innodb_mutex_spin_rounds.SetValue(spin_rounds)
 				data = append(data, Innodb_mutex_spin_rounds)
 
 				os_waits, _ := strconv.Atoi(matches[3])
-				Innodb_mutex_os_waits := NewMetric("Innodb_mutex_os_waits")
+				Innodb_mutex_os_waits := models.NewMetric("Innodb_mutex_os_waits", server)
 				Innodb_mutex_os_waits.SetValue(os_waits)
 				data = append(data, Innodb_mutex_os_waits)
 			}

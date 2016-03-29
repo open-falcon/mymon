@@ -1,8 +1,8 @@
-package main
+package models
 
 import (
 	"fmt"
-	"os"
+	"github.com/coraldane/mymon/g"
 	"time"
 )
 
@@ -233,19 +233,6 @@ var DataType = map[string]string{
 	"Threads_created":            DELTA_PS,
 }
 
-type MysqlIns struct {
-	Host string
-	Port int
-	Tag  string
-}
-
-func dataType(key_ string) string {
-	if v, ok := DataType[key_]; ok {
-		return v
-	}
-	return ORIGIN
-}
-
 type MetaData struct {
 	Metric      string      `json:"metric"`      //key
 	Endpoint    string      `json:"endpoint"`    //hostname
@@ -262,29 +249,24 @@ func (m *MetaData) String() string {
 	return s
 }
 
-func NewMetric(name string) *MetaData {
+func (m *MetaData) SetValue(v interface{}) {
+	m.Value = v
+}
+
+func NewMetric(name string, server *g.DBServer) *MetaData {
 	return &MetaData{
 		Metric:      name,
-		Endpoint:    hostname(),
+		Endpoint:    g.Hostname(server),
 		CounterType: dataType(name),
-		Tags:        fmt.Sprintf("port=%d", cfg.Port),
+		Tags:        fmt.Sprintf("port=%d", server.Port),
 		Timestamp:   time.Now().Unix(),
 		Step:        60,
 	}
 }
 
-func hostname() string {
-	host := cfg.Endpoint
-	if host != "" {
-		return host
+func dataType(key_ string) string {
+	if v, ok := DataType[key_]; ok {
+		return v
 	}
-	host, err := os.Hostname()
-	if err != nil {
-		host = cfg.Host
-	}
-	return host
-}
-
-func (m *MetaData) SetValue(v interface{}) {
-	m.Value = v
+	return ORIGIN
 }
