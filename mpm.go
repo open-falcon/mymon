@@ -18,7 +18,7 @@ type Cfg struct {
 	LogFile      string
 	LogLevel     int
 	FalconClient string
-	Endpoint string
+	Endpoint     string
 
 	User string
 	Pass string
@@ -104,6 +104,7 @@ func (conf *Cfg) readConf(file string) error {
 
 func timeout() {
 	time.AfterFunc(TIME_OUT*time.Second, func() {
+		MysqlAlive(nil, false)
 		log.Error("Execute timeout")
 		os.Exit(1)
 	})
@@ -113,13 +114,17 @@ func MysqlAlive(m *MysqlIns, ok bool) {
 	data := NewMetric("mysql_alive_local")
 	if ok {
 		data.SetValue(1)
+	} else {
+		data.SetValue(0)
 	}
 	msg, err := sendData([]*MetaData{data})
 	if err != nil {
 		log.Errorf("Send alive data failed: %v", err)
 		return
 	}
-	log.Infof("Alive data response %s: %s", m.String(), string(msg))
+	if m != nil {
+		log.Infof("Alive data response %s: %s", m.String(), string(msg))
+	}
 }
 
 func FetchData(m *MysqlIns) (err error) {
