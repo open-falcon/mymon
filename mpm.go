@@ -179,6 +179,12 @@ func FetchData(m *MysqlIns) (err error) {
 	}
 	data = append(data, slaveState...)
 
+	dataSize, err := getDataSize(m, db)
+	if err != nil {
+		return
+	}
+	data = append(data, dataSize)
+
 	msg, err := sendData(data)
 	if err != nil {
 		return

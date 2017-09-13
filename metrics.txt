@@ -402,3 +402,4 @@ Uptime
 Uptime_since_flush_status
 wait_timeout
 warning_count
+Data_size
