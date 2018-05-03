@@ -60,7 +60,7 @@ func procsStatus(m *MysqlIns, db mysql.Conn) ([]*MetaData, error) {
 			key_ = "none"
 		}
 
-		if match("/^(Table lock|Waiting for .*lock)$/", key_) {
+		if match("^Table lock|Waiting for .*lock$", key_) {
 			key_ = "Locked"
 		}
 
