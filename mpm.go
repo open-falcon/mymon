@@ -179,6 +179,12 @@ func FetchData(m *MysqlIns) (err error) {
 	}
 	data = append(data, slaveState...)
 
+	procsState, err := procsStatus(m, db)
+	if err != nil{
+		return
+	}
+	data = append(data, procsState...)
+
 	msg, err := sendData(data)
 	if err != nil {
 		return
