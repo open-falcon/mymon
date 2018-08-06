@@ -1,0 +1,4 @@
+FalconIgnore:
+longest_transaction/port=3306$100
+Com_insert_select/isSlave=0,port=3306,readOnly=0,type=mysql
+# Com_test/isSlave=0,port=3306,readOnly=0,type=mysql

@@ -1,0 +1,73 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "Pc2ORQp+VY3Un/dkh4QwLC7R6lE=",
+			"path": "github.com/BurntSushi/toml",
+			"revision": "a368813c5e648fee92e5f6c30e3944ff9d5e8895",
+			"revisionTime": "2017-06-26T11:06:00Z"
+		},
+		{
+			"checksumSHA1": "ochJai7DifamCfjDhMQGZYrqrDE=",
+			"path": "github.com/astaxie/beego/logs",
+			"revision": "08c3ca642eb437f1dd65a617e107bdd9aafb66b0",
+			"revisionTime": "2018-07-08T08:11:35Z"
+		},
+		{
+			"checksumSHA1": "dvabztWVQX8f6oMLRyv4dLH+TGY=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
+			"revisionTime": "2018-05-06T18:05:49Z"
+		},
+		{
+			"checksumSHA1": "+k58oVsPE5qcJOpN7om0nezEE1o=",
+			"path": "github.com/gpmgo/gopm/modules/log",
+			"revision": "7edb73a0f439c016ee40b6608bc271c7fc4462e9",
+			"revisionTime": "2017-07-27T21:13:37Z"
+		},
+		{
+			"checksumSHA1": "ljd3FhYRJ91cLZz3wsH9BQQ2JbA=",
+			"path": "github.com/pkg/errors",
+			"revision": "816c9085562cd7ee03e7f8188a1cfd942858cded",
+			"revisionTime": "2018-03-11T21:45:15Z"
+		},
+		{
+			"checksumSHA1": "LuFv4/jlrmFNnDb/5SCSEPAM9vU=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
+			"revisionTime": "2018-05-06T18:05:49Z"
+		},
+		{
+			"checksumSHA1": "xdpUw0E6MSlz1V5Oo/d2qDngv6s=",
+			"path": "github.com/sebdah/goldie",
+			"revision": "8784dd1ab561dcf43d141f6678e9e41f3d0dff55",
+			"revisionTime": "2018-04-24T09:14:53Z"
+		},
+		{
+			"checksumSHA1": "c6pbpF7eowwO59phRTpF8cQ80Z0=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
+			"revisionTime": "2018-05-06T18:05:49Z"
+		},
+		{
+			"checksumSHA1": "oRXWHvweXZQ99jtuUtYVvKv8oI0=",
+			"path": "github.com/ziutek/mymysql/mysql",
+			"revision": "6b40250a131b3c5c7c3a97c32b44cc90ed2467ce",
+			"revisionTime": "2018-07-20T02:47:22Z"
+		},
+		{
+			"checksumSHA1": "dCJh+e/4YwSa5KtS9teG7db1FNQ=",
+			"path": "github.com/ziutek/mymysql/native",
+			"revision": "6b40250a131b3c5c7c3a97c32b44cc90ed2467ce",
+			"revisionTime": "2018-07-20T02:47:22Z"
+		},
+		{
+			"path": "golang.org/x/mnet/context",
+			"revision": ""
+		}
+	],
+	"rootPath": "github.com/open-falcon/mymon"
+}

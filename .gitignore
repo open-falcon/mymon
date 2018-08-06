@@ -1,3 +1,17 @@
 *.swp
 mymon
+*.out
+*.pyc
 *.log
+log/
+admin/
+grants/
+.idea/
+falcon_monitor
+
+innodb_mymon.*
+process_mymon.*
+fixtures/innodb_mymon.*
+fixtures/process_mymon.*
+coverage.*
+version.go
