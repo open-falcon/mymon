@@ -1,5 +1,5 @@
 # This how we want to name the binary output
-BINARY=falcon_monitor
+BINARY=mymon
 
 # Add mysql version for testing `MYSQL_VERSION=5.7 make docker`
 # use mysql:latest as default
