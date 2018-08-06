@@ -40,8 +40,8 @@ falcon_client=http://127.0.0.1:1988/v1/push # falcon agent连接地址
 
 [mysql]
 user=root # 数据库用户名
-password=1t'sB1g3rt # 您的数据库密码
-host=example.com # 数据库连接地址
+password=1tIsB1g3rt # 您的数据库密码
+host=127.0.0.1 # 数据库连接地址
 port=3306 # 数据库端口
 ```
 
@@ -52,4 +52,4 @@ port=3306 # 数据库端口
 ## Contributors
 
 * libin 微信：libin_cc 邮件：libin_dba@xiaomi.com [OLD]
-* liuzidong 邮件：liuzidong@xiaomi.com [CURRENT]
+* liuzidong [![Chat on gitter](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sylzd) 邮件：liuzidong@xiaomi.com [CURRENT]

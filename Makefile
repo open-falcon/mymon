@@ -54,6 +54,7 @@ clean:
 	@rm -f coverage.* innodb_mymon.* ./fixtures/innodb_mymon.* ./fixtures/process_mymon.* ./fixtures/*.log
 	@find . -name "innodb_*" -delete
 	@find . -name "process_*" -delete
+	@find . -name "*.log" -delete
 
 .PHONY: lint
 lint:
