@@ -139,7 +139,10 @@ func ShowSlaveStatus(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 	}
 	heartbeat, err := ShowOtherMetric(conf, db, "Heartbeats_Behind_Master")
 	if err != nil {
-		return nil, err
+		// mysql.heartbeat table not necessary exist if you don't care about heartbeat
+		// bypass heartbeat table not exist error
+		Log.Info("Heartbeats_Behind_Master: %s", err.Error())
+		err = nil
 	}
 	data := make([]*MetaData, len(SlaveStatus))
 	for i, s := range SlaveStatus {
