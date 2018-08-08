@@ -37,7 +37,7 @@ func SendData(conf *common.Config, data []*MetaData) ([]byte, error) {
 	}
 	Log.Info("Send to %s, size: %d", conf.Base.FalconClient, len(data))
 	for _, m := range data {
-		Log.Info("%s", m)
+		Log.Info("%v", m)
 	}
 
 	res, err := http.Post(conf.Base.FalconClient, "Content-Type: application/json", bytes.NewBuffer(js))

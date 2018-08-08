@@ -106,7 +106,6 @@ func fetchData(conf *common.Config, db mysql.Conn) (err error) {
 	if err != nil {
 		return
 	}
-	Tag = GetTag(conf)
 
 	// SHOW XXX Metric
 	var data []*MetaData
@@ -116,6 +115,8 @@ func fetchData(conf *common.Config, db mysql.Conn) (err error) {
 	if err != nil {
 		return
 	}
+
+	Tag = GetTag(conf)
 
 	globalStatus, err := ShowGlobalStatus(conf, db)
 	if err != nil {
@@ -145,7 +146,11 @@ func fetchData(conf *common.Config, db mysql.Conn) (err error) {
 
 	// Send Data to falcon-agent
 	msg, err := SendData(conf, data)
-	Log.Info("Send response %s:%d - %s", conf.DataBase.Host, conf.DataBase.Port, string(msg))
+	if err != nil {
+		Log.Error("Send response %s:%d - %s", conf.DataBase.Host, conf.DataBase.Port, string(msg))
+	} else {
+		Log.Info("Send response %s:%d - %s", conf.DataBase.Host, conf.DataBase.Port, string(msg))
+	}
 
 	err = ShowProcesslist(conf, db)
 	if err != nil {

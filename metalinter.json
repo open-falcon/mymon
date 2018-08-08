@@ -19,7 +19,7 @@
     ],
     "Exclude": [
         ".*permissions.*",
-	"shadows declaration at show.go:98"
+	    "shadows declaration at .*show.go:98"
     ],
     "Deadline": "2m"
 }

@@ -21,10 +21,12 @@ fmt:
 # Run all test cases
 .PHONY: test
 test:
-	go test ./...
+	go test `go list ./... | grep -Ev '/fixtures|/vendor/'`
+
 .PHONY: cover
 cover:
-	go test -coverpkg=./... -coverprofile=coverage.data ./... | column -t
+	go test `go list ./... | grep -Ev '/fixtures|/vendor/'` \
+	-coverpkg=./... -coverprofile=coverage.data ./... | column -t
 	go tool cover -html=coverage.data -o coverage.html
 	go tool cover -func=coverage.data -o coverage.txt
 	@tail -n 1 coverage.txt | awk '{sub(/%/, "", $$NF); \
@@ -52,19 +54,39 @@ clean:
 	$(info rm -f ${BINARY})
 	@if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 	@rm -f coverage.* innodb_mymon.* ./fixtures/innodb_mymon.* ./fixtures/process_mymon.* ./fixtures/*.log
+	@for GOOS in darwin linux windows; do \
+		for GOARCH in 386 amd64; do \
+			rm -f ./release/${BINARY}.$${GOOS}-$${GOARCH} ;\
+		done ;\
+	done
 	@find . -name "innodb_*" -delete
 	@find . -name "process_*" -delete
 	@find . -name "*.log" -delete
+	@find . -name "push_metric.txt" -delete
+	@docker stop mymon-master 2>/dev/null || true
+	@docker stop mymon-slave 2>/dev/null || true
+	@kill -9 `lsof -ti tcp:1988` 2>/dev/null || true
 
 .PHONY: lint
 lint:
 	gometalinter.v1 --config metalinter.json ./...
 
-.PHONY: docker
-docker:
+.PHONY: release
+release:
+	@echo "\033[92mCross platform building for release ...\033[0m"
+	@for GOOS in darwin linux windows; do \
+		for GOARCH in 386 amd64; do \
+			GOOS=$${GOOS} GOARCH=$${GOARCH} go build -v -o ./release/${BINARY}.$${GOOS}-$${GOARCH} 2>/dev/null ; \
+		done ; \
+	done
+
+.PHONY: test_env
+test_env:
 	@echo "\033[92mBuild mysql test enviorment\033[0m"
 	@docker stop mymon-master 2>/dev/null || true
 	@docker stop mymon-slave 2>/dev/null || true
+	@kill -9 `lsof -ti tcp:1988` 2>/dev/null || true
+
 	@docker run --name mymon-master --rm -d \
 	-e MYSQL_ROOT_PASSWORD=1tIsB1g3rt \
 	-e MYSQL_DATABASE=mysql \
@@ -91,7 +113,9 @@ docker:
 	printf '.' ; sleep 1 ; done ; echo '.'
 	@echo "mysql slave environment is ready!"
 
+	@echo "begin to set falcon push environment: "
+	go run fixtures/push_mock.go &
 
 .PHONY: daily
-daily: fmt docker test cover lint clean
+daily: fmt test_env test cover lint clean
 	@echo "\033[93mdaily build successed! \033[m"

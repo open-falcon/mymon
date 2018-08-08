@@ -13,5 +13,7 @@ innodb_mymon.*
 process_mymon.*
 fixtures/innodb_mymon.*
 fixtures/process_mymon.*
+*push_metric.txt
 coverage.*
 version.go
+release/.*
