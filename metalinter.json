@@ -1,0 +1,25 @@
+{
+    "Vendor": true,
+    "DisableAll": true,
+    "Enable": [
+        "gofmt",
+        "goimports",
+        "interfacer",
+        "misspell",
+        "unconvert",
+        "gosimple",
+        "golint",
+        "structcheck",
+        "deadcode",
+        "ineffassign",
+        "vetshadow",
+        "varcheck",
+        "gas",
+        "vet"
+    ],
+    "Exclude": [
+        ".*permissions.*",
+	    "shadows declaration at .*show.go:98"
+    ],
+    "Deadline": "2m"
+}

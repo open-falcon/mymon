@@ -1,0 +1,5 @@
+0: MetaData Metric:Innodb_mutex_spin_waits Endpoint:localhost Value:5870888 CounterType:COUNTER Tags:test_tag Timestamp:0 Step:60
+1: MetaData Metric:Innodb_mutex_spin_rounds Endpoint:localhost Value:19812448 CounterType:COUNTER Tags:test_tag Timestamp:0 Step:60
+2: MetaData Metric:Innodb_mutex_os_waits Endpoint:localhost Value:375285 CounterType:COUNTER Tags:test_tag Timestamp:0 Step:60
+3: MetaData Metric:History_list_length Endpoint:localhost Value:35 CounterType:GAUGE Tags:test_tag Timestamp:0 Step:60
+4: MetaData Metric:longest_transaction Endpoint:localhost Value:11 CounterType:GAUGE Tags:test_tag Timestamp:0 Step:60

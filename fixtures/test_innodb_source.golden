@@ -1,0 +1,116 @@
+=====================================
+2018-07-20 17:04:00 0x7fb07c0f0700 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 13 seconds
+-----------------
+BACKGROUND THREAD
+-----------------
+srv_master_thread loops: 40 srv_active, 0 srv_shutdown, 935995 srv_idle
+srv_master_thread log flush and writes: 0
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 107
+OS WAIT ARRAY INFO: signal count 108
+Mutex spin waits 5870888, rounds 19812448, OS waits 375285
+RW-shared spins 34, rounds 59, OS waits 27
+RW-excl spins 63, rounds 506, OS waits 3
+RW-sx spins 1, rounds 3, OS waits 0
+Spin rounds per wait: 1.74 RW-shared, 8.03 RW-excl, 3.00 RW-sx
+------------
+TRANSACTIONS
+------------
+Trx id counter 3157
+Purge done for trx's n:o < 3157 undo n:o < 0 state: running but idle
+History list length 35
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421871135909728, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 2834, ACTIVE 11 sec inserting
+mysql tables in use 1, locked 1
+1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 1929
+MySQL thread id 3959, OS thread handle 140395972331264, query id 1797 10.231.66.70 lzd update
+INSERT INTO payment VALUES (1,1,1,76,'2.99','2005-05-25 11:30:37','2006-02-15 22:12:30'),(2,1,1,573,'0.99','2005-05-28 10:35:23','2006-02-15 22:12:30'),(3,1,1,1185,'5.99','2005-06-15 00:54:12','2006-02-15 22:12:30'),(4,1,2,1422,'0.99','2005-06-15 18:02:53','2006-02-15 22:12:30'),(5,1,2,1476,'9.99','2005-06-15 21:08:46','2006-02-15 22:12:30'),(6,1,1,1725,'4.99','2005-06-16 15:18:57','2006-02-15 22:12:30'),(7,1,1,2308,'4.99','2005-06-18 08:41:48',)
+---TRANSACTION 28345, ACTIVE 1 sec inserting
+mysql tables in use 1, locked 1
+1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 1929
+MySQL thread id 3959, OS thread handle 140395972331264, query id 1797 10.231.66.70 lzd update
+INSERT INTO payment VALUES (1,1,1,76,'2.99','2005-05-25 11:30:37','2006-02-15 22:12:30')
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
+I/O thread 1 state: waiting for completed aio requests (log thread)
+I/O thread 2 state: waiting for completed aio requests (read thread)
+I/O thread 3 state: waiting for completed aio requests (read thread)
+I/O thread 4 state: waiting for completed aio requests (read thread)
+I/O thread 5 state: waiting for completed aio requests (read thread)
+I/O thread 6 state: waiting for completed aio requests (write thread)
+I/O thread 7 state: waiting for completed aio requests (write thread)
+I/O thread 8 state: waiting for completed aio requests (write thread)
+I/O thread 9 state: waiting for completed aio requests (write thread)
+Pending normal aio reads: [0, 0, 0, 0] , aio writes: [0, 0, 0, 0] ,
+ ibuf aio reads:, log i/o's:, sync i/o's:
+Pending flushes (fsync) log: 0; buffer pool: 0
+882 OS file reads, 80603 OS file writes, 3783 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 0.00 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 0, seg size 2, 0 merges
+merged operations:
+ insert 0, delete mark 0, delete 0
+discarded operations:
+ insert 0, delete mark 0, delete 0
+Hash table size 34679, node heap has 1 buffer(s)
+Hash table size 34679, node heap has 2 buffer(s)
+Hash table size 34679, node heap has 4 buffer(s)
+Hash table size 34679, node heap has 1 buffer(s)
+Hash table size 34679, node heap has 1 buffer(s)
+Hash table size 34679, node heap has 2 buffer(s)
+Hash table size 34679, node heap has 2 buffer(s)
+Hash table size 34679, node heap has 9 buffer(s)
+0.00 hash searches/s, 0.00 non-hash searches/s
+---
+LOG
+---
+Log sequence number          27640063
+Log buffer assigned up to    27640063
+Log buffer completed up to   27640063
+Log written up to            27640063
+Log flushed up to            27640063
+Added dirty pages up to      27640063
+Pages flushed up to          27640063
+Last checkpoint at           27640063
+78255 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total large memory allocated 137428992
+Dictionary memory allocated 657058
+Buffer pool size   8192
+Free buffers       6673
+Database pages     1497
+Old database pages 532
+Modified dbTestMaster pages  0
+Pending reads      0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 3, not young 0
+0.00 youngs/s, 0.00 non-youngs/s
+Pages read 859, created 638, written 1977
+0.00 reads/s, 0.00 creates/s, 0.00 writes/s
+No buffer pool page gets since the last printout
+Pages read ahead 0.00/s, evicted without access 0.00/s, Random read ahead 0.00/s
+LRU len: 1497, unzip_LRU len: 0
+I/O sum[0]:cur[0], unzip sum[0]:cur[0]
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+0 read views open inside InnoDB
+Process ID=7680, Main thread ID=140395649316608 , state=sleeping
+Number of rows inserted 47214, updated 1972, deleted 137, read 12173
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 0.00 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================

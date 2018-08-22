@@ -1,55 +1,55 @@
+# README.md
+
 ## Introduction
 
-mymon(MySQL-Monitor) -- MySQL数据库运行状态数据采集脚本，采集包括global status, global variables, slave status等。
+mymon(MySQL-Monitor) 是Open-Falcon用来监控MySQL数据库运行状态的一个插件，采集包括global status, global variables, slave status以及innodb status等MySQL运行状态信息。
 
 ## Installation
 
 ```bash
-# set $GOPATH and $GOROOT
+# Build
+go get -u github.com/open-falcon/mymon
+cd $GOPATH/src/github.com/open-falcon/mymon
+make
 
-mkdir -p $GOPATH/src/github.com/open-falcon
-cd $GOPATH/src/github.com/open-falcon
-git clone https://github.com/open-falcon/mymon.git
-
-cd mymon
-go get ./...
-go build -o mymon
-
-echo '* * * * * cd $GOPATH/src/github.com/open-falcon/mymon && ./mymon -c etc/mon.cfg' > /etc/cron.d/mymon
-
+# Add to crontab
+echo '* * * * * cd ${WORKPATH} && ./mymon -c etc/mymon.cfg' > /etc/cron.d/mymon
 ```
 
 ## Configuration
 
+配置文件采用INI标准。 
+
+```ini
+[default]
+basedir = . # 工作目录
+log_dir = ./fixtures # 日志目录，默认日志文件为myMon.log,旧版本有log_file项，如果同时设置了，会优先采用log_file
+ignore_file = ./falconignore # 配置忽略的metric项
+snapshot_dir = ./snapshot # 保存快照(process, innodb status)的目录
+snapshot_day = 10 # 保存快照的时间(日)
+log_level  = 5 #  日志级别[RFC5424]
+# 0 LevelEmergency
+# 1 LevelAlert
+# 2 LevelCritical
+# 3 LevelError
+# 4 LevelWarning
+# 5 LevelNotice
+# 6 LevelInformational
+# 7 LevelDebug
+falcon_client=http://127.0.0.1:1988/v1/push # falcon agent连接地址
+
+[mysql]
+user=root # 数据库用户名
+password=1tIsB1g3rt # 您的数据库密码
+host=127.0.0.1 # 数据库连接地址
+port=3306 # 数据库端口
 ```
-    [default]
-    log_file=mymon.log # 日志路径和文件名
-    # Panic 0
-    # Fatal 1
-    # Error 2
-    # Warn 3
-    # Info 4
-    # Debug 5
-    log_level=4 # 日志级别
 
-    falcon_client=http://127.0.0.1:1988/v1/push # falcon agent连接地址
+## Metric
 
-    #自定义endpoint
-    endpoint=127.0.0.1 #若不设置则使用OS的hostname
-
-    [mysql]
-    user=root # 数据库用户名
-    password= # 数据库密码
-    host=127.0.0.1 # 数据库连接地址
-    port=3306 # 数据库端口
-```
-
-## MySQL metrics
-
-请参考./metrics.txt，其中的内容，仅供参考，根据MySQL的版本、配置不同，采集到的metrics也有差别。
-
+采集的metric信息，请参考./metrics.txt。该文件仅供参考，实际采集信息会根据MySQL版本、配置的不同而变化。
 
 ## Contributors
 
- - libin  微信：libin_cc  邮件：libin_dba@xiaomi.com
-
+* libin 微信：libin_cc 邮件：libin_dba@xiaomi.com [OLD]
+* liuzidong [![Chat on gitter](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sylzd) 邮件：liuzidong@xiaomi.com [CURRENT]
