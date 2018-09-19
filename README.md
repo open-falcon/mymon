@@ -13,7 +13,7 @@ cd $GOPATH/src/github.com/open-falcon/mymon
 make
 
 # Add to crontab
-echo '* * * * * cd ${WORKPATH} && ./mymon -c etc/mymon.cfg' > /etc/cron.d/mymon
+echo '* * * * * cd ${WORKPATH} && ./mymon -c etc/myMon.cfg' > /etc/cron.d/mymon
 ```
 
 ## Configuration
