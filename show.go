@@ -178,7 +178,7 @@ func ShowOtherMetric(conf *common.Config, db mysql.Conn, metric string) (*MetaDa
 	case "master_is_read_only", "slave_is_read_only", "Master_is_readonly":
 		newMetaData.SetValue(IsReadOnly)
 	case "innodb_stats_on_metadata":
-		row, _, err = db.QueryFirst("SELECT /*!50504 @@GLOBAL.innodb_stats_on_metadata */;")
+		row, _, err = db.QueryFirst("SELECT /*!50504 */ @@GLOBAL.innodb_stats_on_metadata;")
 		newMetaData.SetValue(row.Int(0))
 	case "io_thread_delay":
 		var res mysql.Result
