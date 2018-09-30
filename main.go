@@ -14,10 +14,14 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/open-falcon/mymon/common"
@@ -73,19 +77,31 @@ func main() {
 	// init log and other necessary
 	Log = common.MyNewLogger(conf, common.CompatibleLog(conf))
 
-	db, err := common.NewMySQLConnection(conf)
+	// auto scan mysql port
+	err, ports := scanMySqlPort()
 	if err != nil {
-		fmt.Printf("NewMySQLConnection Error: %s\n", err.Error())
+		fmt.Printf("scan mysql port error %s", err.Error())
 		return
 	}
-	defer func() { _ = db.Close() }()
 
-	// start...
-	Log.Info("MySQL Monitor for falcon")
-	go timeout()
-	err = fetchData(conf, db)
-	if err != nil && err != io.EOF {
-		Log.Error("Error: %s", err.Error())
+	for _, portString := range ports {
+		port, _ := strconv.Atoi(portString)
+		conf.DataBase.Port = port
+		db, err := common.NewMySQLConnection(conf)
+		if err != nil {
+			fmt.Printf("NewMySQLConnection Error: %s\n", err.Error())
+			return
+		}
+
+		defer func() { _ = db.Close() }()
+
+		// start...
+		Log.Info("MySQL Monitor for falcon, port is %s", port)
+		go timeout()
+		err = fetchData(conf, db)
+		if err != nil && err != io.EOF {
+			Log.Error("Error: %s", err.Error())
+		}
 	}
 }
 
@@ -97,6 +113,7 @@ func timeout() {
 }
 
 func fetchData(conf *common.Config, db mysql.Conn) (err error) {
+	Log.Debug("start fetch data, port is %d", conf.DataBase.Port)
 	defer func() {
 		MySQLAlive(conf, err == nil)
 	}()
@@ -157,4 +174,13 @@ func fetchData(conf *common.Config, db mysql.Conn) (err error) {
 		return
 	}
 	return
+}
+
+func scanMySqlPort() (error, []string) {
+	cmd := exec.Command("/bin/sh", "-c", `netstat -ntupl |grep mysqld |grep -o ':[0-9]\+' |sed 's/:\+//g' |sort -k1n |uniq`)
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	ports := strings.Split(strings.TrimSpace(out.String()), "\n")
+	return err, ports
 }
