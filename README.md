@@ -59,6 +59,7 @@ port=3306 # 数据库端口
 https://www.percona.com/doc/percona-toolkit/LATEST/pt-heartbeat.html
 
 
+## Contributors
 
 * libin 微信：libin_cc 邮件：libin_dba@xiaomi.com [OLD]
 * liuzidong [![Chat on gitter](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sylzd) 邮件：liuzidong@xiaomi.com [CURRENT]
