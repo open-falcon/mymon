@@ -33,6 +33,7 @@ func SendData(conf *common.Config, data []*MetaData) ([]byte, error) {
 	data = filterIgnoreData(conf, data)
 	js, err := json.Marshal(data)
 	if err != nil {
+		Log.Debug("parse json data error: %+v", err)
 		return nil, err
 	}
 	Log.Info("Send to %s, size: %d", conf.Base.FalconClient, len(data))
@@ -42,6 +43,7 @@ func SendData(conf *common.Config, data []*MetaData) ([]byte, error) {
 
 	res, err := http.Post(conf.Base.FalconClient, "Content-Type: application/json", bytes.NewBuffer(js))
 	if err != nil {
+		Log.Debug("send data to falcon-agent error: %+v", err)
 		return nil, err
 	}
 
@@ -77,6 +79,7 @@ func filterIgnoreData(conf *common.Config, data []*MetaData) []*MetaData {
 	f, err := os.OpenFile(ignoreFile, os.O_RDONLY, 0644)
 	// ignorefile does not exists
 	if err != nil {
+		Log.Debug("ignorefile %s does not exist", ignoreFile)
 		return data
 	}
 	inputReader := bufio.NewReader(f)
@@ -137,11 +140,13 @@ func Snapshot(conf *common.Config, note string, fileNameDay string, fileNameOldD
 	}
 	f, err := os.OpenFile(fileNameDay, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
+		Log.Debug("open snapshot file %s error: %+v", fileNameDay, err)
 		return err
 	}
 	defer f.Close()
 	_, err = f.WriteString(note)
 	if err != nil {
+		Log.Debug("write info to snapshot file error: %+v", err)
 		return err
 	}
 	e := os.Remove(fileNameOldDay)

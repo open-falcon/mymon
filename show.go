@@ -42,6 +42,7 @@ func ShowProcesslist(conf *common.Config, db mysql.Conn) error {
 	var note string
 	rows, _, err := db.Query("SHOW FULL PROCESSLIST")
 	if err != nil {
+		Log.Debug("get processlist error: %+v", err)
 		return err
 	}
 	for _, row := range rows {
@@ -59,12 +60,14 @@ func ShowProcesslist(conf *common.Config, db mysql.Conn) error {
 func ShowInnodbStatus(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 	status, _, err := db.QueryFirst("SHOW /*!50000 ENGINE*/ INNODB STATUS")
 	if err != nil {
+		Log.Debug("show innodb status error: %+v", err)
 		return nil, err
 	}
 	allStatus := status.Str(2)
 	fileNameDay, fileNameOldDay := common.GetFileNameDayAndOldDay(conf, "innodb")
 	err = Snapshot(conf, allStatus, fileNameDay, fileNameOldDay)
 	if err != nil {
+		Log.Debug("write snapshot error: %+v", err)
 		return nil, err
 	}
 
@@ -80,6 +83,7 @@ func ShowBinaryLogs(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 
 	rows, res, err := db.Query("SHOW BINARY LOGS")
 	if err != nil {
+		Log.Debug("show binary logs error: %+v", err)
 		return []*MetaData{binlogFileCounts, binlogFileSize}, err
 	}
 
@@ -115,14 +119,17 @@ func ShowSlaveStatus(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 		// Master_is_readonly VS master_is_read_only for version compatible, ugly
 		masterReadOnly, err := ShowOtherMetric(conf, db, "Master_is_readonly")
 		if err != nil {
+			Log.Debug("get Master_is_readonly metric error: %+v", err)
 			return nil, err
 		}
 		masterReadOnly2, err := ShowOtherMetric(conf, db, "master_is_read_only")
 		if err != nil {
+			Log.Debug("get master_is_readonly metric error: %+v", err)
 			return nil, err
 		}
 		innodbStatsOnMetadata, err := ShowOtherMetric(conf, db, "innodb_stats_on_metadata")
 		if err != nil {
+			Log.Debug("get innodb_stats_on_metadata metric error: %+v", err)
 			return nil, err
 		}
 		return []*MetaData{isSlaveMetric, masterReadOnly, masterReadOnly2, innodbStatsOnMetadata}, nil
@@ -131,10 +138,12 @@ func ShowSlaveStatus(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 	// be slave
 	ioDelay, err := ShowOtherMetric(conf, db, "io_thread_delay")
 	if err != nil {
+		Log.Debug("get io_thread_delay metric error: %+v", err)
 		return nil, err
 	}
 	slaveReadOnly, err := ShowOtherMetric(conf, db, "slave_is_read_only")
 	if err != nil {
+		Log.Debug("get slave_is_read_only metric error: %+v", err)
 		return nil, err
 	}
 	heartbeat, err := ShowOtherMetric(conf, db, "Heartbeats_Behind_Master")
@@ -178,7 +187,7 @@ func ShowOtherMetric(conf *common.Config, db mysql.Conn, metric string) (*MetaDa
 	case "master_is_read_only", "slave_is_read_only", "Master_is_readonly":
 		newMetaData.SetValue(IsReadOnly)
 	case "innodb_stats_on_metadata":
-		row, _, err = db.QueryFirst("SELECT /*!50504 @@GLOBAL.innodb_stats_on_metadata */;")
+		row, _, err = db.QueryFirst("SELECT /*!50504 @@GLOBAL.innodb_stats_on_metadata,*/ -1;")
 		newMetaData.SetValue(row.Int(0))
 	case "io_thread_delay":
 		var res mysql.Result
@@ -215,6 +224,7 @@ func ShowOtherMetric(conf *common.Config, db mysql.Conn, metric string) (*MetaDa
 func parseMySQLStatus(conf *common.Config, db mysql.Conn, sql string) ([]*MetaData, error) {
 	rows, _, err := db.Query(sql)
 	if err != nil {
+		Log.Debug("sql query: %s error: %+v", sql, err)
 		return nil, err
 	}
 
@@ -247,6 +257,7 @@ func parseInnodbSection(
 						row, "ACTIVE ")[1],
 					" sec")[0])
 			if err != nil {
+				Log.Debug("parse TRANSACTIONS of innodb info error:%+v", err)
 				return err
 			}
 			if tmpLongTransactionTime > *longTranTime {
@@ -325,6 +336,7 @@ func parseInnodbStatus(conf *common.Config, rows []string) ([]*MetaData, error) 
 		}
 		err = parseInnodbSection(conf, row, section, &data, &longTranTime)
 		if err != nil {
+			Log.Debug("parse innodb section error: %+v", err)
 			return nil, err
 		}
 	}

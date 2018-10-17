@@ -49,7 +49,16 @@ port=3306 # 数据库端口
 
 采集的metric信息，请参考./metrics.txt。该文件仅供参考，实际采集信息会根据MySQL版本、配置的不同而变化。
 
-## Contributors
+### 同步延迟
+
+关于同步延迟检测的metric有两个: `Seconds_Behind_Master`、`Heartbeats_Behind_Master`。
+
+`Seconds_Behind_Master`是MySQL`SHOW SLAVE STATUS`输出的状态变量。由于低版本的MySQL还不支持HEARTBEAT_EVENT，在低版本的MySQL中该状态可能会由于IO线程假死导致测量不准确，因此mymon增加了`Heartbeats_Behind_Master`。它依赖于`pt-heartbeat`，统计基于`pt-heartbeat`生成的mysql.heartbeat表中的ts字段值与从库当前时间差。如果未配置`pt-heartbeat`，则该项上报-1值。
+
+关于pt-heartbeat的配置使用，链接如下：
+https://www.percona.com/doc/percona-toolkit/LATEST/pt-heartbeat.html
+
+
 
 * libin 微信：libin_cc 邮件：libin_dba@xiaomi.com [OLD]
 * liuzidong [![Chat on gitter](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sylzd) 邮件：liuzidong@xiaomi.com [CURRENT]

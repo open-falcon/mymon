@@ -341,6 +341,7 @@ func MySQLAlive(conf *common.Config, ok bool) {
 func GetIsReadOnly(db mysql.Conn) (int, error) {
 	row, _, err := db.QueryFirst("select @@read_only")
 	if err != nil {
+		Log.Debug("get read_only error: %+v", err)
 		return -1, err
 	}
 	return row.Int(0), nil
