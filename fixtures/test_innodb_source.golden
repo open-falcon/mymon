@@ -26,6 +26,8 @@ History list length 35
 LIST OF TRANSACTIONS FOR EACH SESSION:
 ---TRANSACTION 421871135909728, not started
 0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 11114640964, ACTIVE (PREPARED) 0 sec
+4 lock struct(s), heap size 1184, 2 row lock(s), undo log entries 2
 ---TRANSACTION 2834, ACTIVE 11 sec inserting
 mysql tables in use 1, locked 1
 1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 1929

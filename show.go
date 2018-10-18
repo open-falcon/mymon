@@ -83,8 +83,9 @@ func ShowBinaryLogs(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 
 	rows, res, err := db.Query("SHOW BINARY LOGS")
 	if err != nil {
-		Log.Debug("show binary logs error: %+v", err)
-		return []*MetaData{binlogFileCounts, binlogFileSize}, err
+		// Received #1381 error from MySQL server: "You are not using binary logging"
+		Log.Debug("SHOW BINARY LOGS Error: %s", err.Error())
+		return []*MetaData{binlogFileCounts, binlogFileSize}, nil
 	}
 
 	for _, row := range rows {
@@ -111,6 +112,7 @@ func ShowSlaveStatus(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 		IsSlave = 0
 	}
 
+	Tag = GetTag(conf)
 	isSlaveMetric := NewMetric(conf, "Is_slave")
 	isSlaveMetric.SetValue(IsSlave)
 
@@ -129,6 +131,7 @@ func ShowSlaveStatus(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 		}
 		innodbStatsOnMetadata, err := ShowOtherMetric(conf, db, "innodb_stats_on_metadata")
 		if err != nil {
+			// mysql < 5.5 doesn't have this variable
 			Log.Debug("get innodb_stats_on_metadata metric error: %+v", err)
 			return nil, err
 		}
@@ -150,7 +153,7 @@ func ShowSlaveStatus(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 	if err != nil {
 		// mysql.heartbeat table not necessary exist if you don't care about heartbeat
 		// bypass heartbeat table not exist error
-		Log.Info("Heartbeats_Behind_Master: %s", err.Error())
+		Log.Debug("Heartbeats_Behind_Master: %s", err.Error())
 		err = nil
 	}
 	data := make([]*MetaData, len(SlaveStatus))
@@ -248,21 +251,27 @@ func parseMySQLStatus(conf *common.Config, db mysql.Conn, sql string) ([]*MetaDa
 func parseInnodbSection(
 	conf *common.Config, row string, section string,
 	pdata *[]*MetaData, longTranTime *int) error {
+	var err error
 	switch section {
 	case "TRANSACTIONS":
-		if strings.Contains(row, "ACTIVE") {
-			tmpLongTransactionTime, err := strconv.Atoi(
-				strings.Split(
-					strings.Split(
-						row, "ACTIVE ")[1],
-					" sec")[0])
-			if err != nil {
-				Log.Debug("parse TRANSACTIONS of innodb info error:%+v", err)
-				return err
+		txPrefixes := []string{"ACTIVE ", "ACTIVE (PREPARED) "}
+		for _, txPrefix := range txPrefixes {
+			if strings.Contains(row, txPrefix) {
+				var tmpLongTransactionTime int
+				secString := strings.Split(strings.Split(
+					row, txPrefix)[1], " sec")[0]
+				tmpLongTransactionTime, err = strconv.Atoi(secString)
+				if err != nil {
+					continue
+				}
+				if tmpLongTransactionTime > *longTranTime {
+					*longTranTime = tmpLongTransactionTime
+				}
+				break
 			}
-			if tmpLongTransactionTime > *longTranTime {
-				*longTranTime = tmpLongTransactionTime
-			}
+		}
+		if err != nil {
+			Log.Warn(err.Error(), "Longest_transaction metric parse Error: ", row)
 		}
 		if strings.Contains(row, "History list length") {
 			hisListLengthStr := strings.Split(row, "length ")[1]
@@ -290,7 +299,8 @@ func parseInnodbSection(
 			*pdata = append(*pdata, InnodbMutexOsWaits)
 		}
 	}
-	return nil
+
+	return err
 }
 
 func parseInnodbStatus(conf *common.Config, rows []string) ([]*MetaData, error) {

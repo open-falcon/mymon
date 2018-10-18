@@ -1,10 +1,10 @@
 # This how we want to name the binary output
 BINARY=mymon
+GO_VERSION_MIN=1.10
 
 # Add mysql version for testing `MYSQL_VERSION=5.7 make docker`
 # use mysql:latest as default
 MYSQL_VERSION := $(or ${MYSQL_VERSION}, ${MYSQL_VERSION}, latest)
-
 
 .PHONY: all
 all: fmt build
@@ -74,6 +74,7 @@ lint:
 .PHONY: release
 release:
 	@echo "\033[92mCross platform building for release ...\033[0m"
+	@bash ./genver.sh $(GO_VERSION_MIN)
 	@for GOOS in darwin linux windows; do \
 		for GOARCH in 386 amd64; do \
 			GOOS=$${GOOS} GOARCH=$${GOARCH} go build -v -o ./release/${BINARY}.$${GOOS}-$${GOARCH} 2>/dev/null ; \
