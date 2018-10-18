@@ -9,10 +9,10 @@ grants/
 .idea/
 falcon_monitor
 
-innodb_mymon.*
-process_mymon.*
-fixtures/innodb_mymon.*
-fixtures/process_mymon.*
+innodb_.*
+process_.*
+fixtures/innodb*
+fixtures/process*
 *push_metric.txt
 coverage.*
 version.go

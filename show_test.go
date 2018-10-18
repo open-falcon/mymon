@@ -101,14 +101,14 @@ func TestShowSlaveStatus(t *testing.T) {
 	defer func() { IsSlave = tempIsSlave }()
 
 	//test master
-	IsSlave = 0
 	res, err = ShowSlaveStatus(confTestMaster, dbTestMaster)
+	assert.Equal(t, 0, IsSlave)
 	assert.NoError(t, err)
 	assert.Equal(t, 4, len(res), "Wrong length of Metric with master!")
 
 	//test slave
-	IsSlave = 1
 	res, err = ShowSlaveStatus(confTestSlave, dbTestSlave)
+	assert.Equal(t, 1, IsSlave)
 	assert.NoError(t, err)
 	assert.Equal(t, len(SlaveStatus)+4, len(res), "Wrong length of Metric with slave!")
 }

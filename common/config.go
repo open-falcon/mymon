@@ -81,6 +81,11 @@ func readConf(file string) (conf Config, err error) {
 		fmt.Println("Host default: 127.0.0.1!")
 		host = "127.0.0.1"
 	}
+	snapshotDir := cfg.Section("default").Key("snapshot_dir").String()
+	if snapshotDir == "" {
+		fmt.Println("SnapshotDir default current dir ")
+		snapshotDir = "."
+	}
 	port, err := cfg.Section("mysql").Key("port").Int()
 	if err != nil {
 		fmt.Println("Port: default 3306!")
@@ -90,7 +95,7 @@ func readConf(file string) (conf Config, err error) {
 	conf = Config{
 		BaseConf{
 			BaseDir:      cfg.Section("default").Key("basedir").String(),
-			SnapshotDir:  cfg.Section("default").Key("snapshot_dir").String(),
+			SnapshotDir:  snapshotDir,
 			SnapshotDay:  snapshotDay,
 			LogDir:       cfg.Section("default").Key("log_dir").String(),
 			LogFile:      cfg.Section("default").Key("log_file").String(),

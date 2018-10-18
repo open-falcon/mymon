@@ -5,8 +5,8 @@
 		{
 			"checksumSHA1": "Pc2ORQp+VY3Un/dkh4QwLC7R6lE=",
 			"path": "github.com/BurntSushi/toml",
-			"revision": "a368813c5e648fee92e5f6c30e3944ff9d5e8895",
-			"revisionTime": "2017-06-26T11:06:00Z"
+			"revision": "3012a1dbe2e4bd1391d42b32f0577cb7bbc7f005",
+			"revisionTime": "2018-08-15T10:47:33Z"
 		},
 		{
 			"checksumSHA1": "ochJai7DifamCfjDhMQGZYrqrDE=",
@@ -53,16 +53,22 @@
 			"revisionTime": "2018-05-06T18:05:49Z"
 		},
 		{
-			"checksumSHA1": "oRXWHvweXZQ99jtuUtYVvKv8oI0=",
-			"path": "github.com/ziutek/mymysql/mysql",
-			"revision": "6b40250a131b3c5c7c3a97c32b44cc90ed2467ce",
-			"revisionTime": "2018-07-20T02:47:22Z"
+			"checksumSHA1": "yzQ4bFHhAZllbMmChdtumg3QWz8=",
+			"path": "github.com/ziutek/mymysql",
+			"revision": "6b05b0cf718f8ee11bc5e18fe78ea7cef0388dc6",
+			"revisionTime": "2018-08-27T08:56:28Z"
 		},
 		{
-			"checksumSHA1": "dCJh+e/4YwSa5KtS9teG7db1FNQ=",
+			"checksumSHA1": "oRXWHvweXZQ99jtuUtYVvKv8oI0=",
+			"path": "github.com/ziutek/mymysql/mysql",
+			"revision": "d069a5a9cd08c04a2dba12c031dd65c2753f6454",
+			"revisionTime": "2018-08-14T11:55:21Z"
+		},
+		{
+			"checksumSHA1": "m3s+OrOHAMX0seOVfuDwt766BQE=",
 			"path": "github.com/ziutek/mymysql/native",
-			"revision": "6b40250a131b3c5c7c3a97c32b44cc90ed2467ce",
-			"revisionTime": "2018-07-20T02:47:22Z"
+			"revision": "d069a5a9cd08c04a2dba12c031dd65c2753f6454",
+			"revisionTime": "2018-08-14T11:55:21Z"
 		},
 		{
 			"path": "golang.org/x/mnet/context",
