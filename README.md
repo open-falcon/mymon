@@ -49,6 +49,9 @@ port=3306 # 数据库端口
 
 采集的metric信息，请参考./metrics.txt。该文件仅供参考，实际采集信息会根据MySQL版本、配置的不同而变化。
 
+### ignore项
+ignore项配置，是用来屏蔽之前在falcon中设好的报警项，会将原有的metric更改名称之后上传，使原有的报警策略不再生效。由于falcon中的屏蔽策略，只能屏蔽endpoint级别，所以在mymon中的ignore功能是帮助提高了报警屏蔽粒度，而非忽略该metric的上报。
+
 ### 同步延迟
 
 关于同步延迟检测的metric有两个: `Seconds_Behind_Master`、`Heartbeats_Behind_Master`。
