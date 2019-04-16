@@ -85,7 +85,7 @@ func ShowBinaryLogs(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 	if err != nil {
 		// Received #1381 error from MySQL server: "You are not using binary logging"
 		Log.Debug("SHOW BINARY LOGS Error: %s", err.Error())
-		return []*MetaData{binlogFileCounts, binlogFileSize}, nil
+		return nil, err
 	}
 
 	for _, row := range rows {
