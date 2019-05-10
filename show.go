@@ -81,9 +81,26 @@ func ShowBinaryLogs(conf *common.Config, db mysql.Conn) ([]*MetaData, error) {
 	binlogFileCounts := NewMetric(conf, "binlog_file_counts")
 	binlogFileSize := NewMetric(conf, "binlog_file_size")
 
+	rows, _, err := db.Query("SHOW GLOBAL VARIABLES like 'log_bin'")
+	if err != nil {
+		Log.Debug("SHOW GLOBAL VARIABLES like 'log_bin' Error: %s", err.Error())
+		return nil, err
+	}
+
+	log_bin_enabled := true
+	for _, row := range rows {
+		if row.Str(1) == "OFF" {
+			log_bin_enabled = false
+		}
+	}
+
+	if !log_bin_enabled {
+		//log_bin is not enabled
+		return nil, err
+	}
+
 	rows, res, err := db.Query("SHOW BINARY LOGS")
 	if err != nil {
-		// Received #1381 error from MySQL server: "You are not using binary logging"
 		Log.Debug("SHOW BINARY LOGS Error: %s", err.Error())
 		return nil, err
 	}

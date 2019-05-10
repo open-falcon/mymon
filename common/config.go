@@ -16,6 +16,7 @@ package common
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/go-ini/ini"
 )
@@ -59,12 +60,12 @@ func readConf(file string) (conf Config, err error) {
 		file = fmt.Sprint("etc/", file)
 		_, err = os.Stat(file)
 		if err != nil {
-			panic(err)
+			return conf, fmt.Errorf("default config file: %s or %s: is not exist.", strings.TrimPrefix(file, "etc/"), file)
 		}
 	}
 	cfg, err := ini.Load(file)
 	if err != nil {
-		panic(err)
+		return conf, err
 	}
 	snapshotDay, err := cfg.Section("default").Key("snapshot_day").Int()
 	if err != nil {
