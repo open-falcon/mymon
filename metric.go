@@ -267,7 +267,7 @@ var DataType = map[string]string{
 // SlaveStatus not all slave status send to falcon-agent, this is a filter
 var SlaveStatus = []string{
 	"Exec_Master_Log_Pos",
-	"Read_Master_log_Pos",
+	"Read_Master_Log_Pos",
 	"Relay_Log_Pos",
 	"Seconds_Behind_Master",
 	"Slave_IO_Running",
